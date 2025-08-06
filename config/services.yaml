@@ -1,0 +1,38 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    app.database_url: '%env(DATABASE_URL)%'
+    app.db_host: '%env(DB_HOST)%'
+    keycloak.host_url: '%env(KEYCLOAK_HOST)%'
+    keycloak.client_id: '%env(KEYCLOAK_CLIENT_ID)%'
+    keycloak.client_secret: '%env(KEYCLOAK_CLIENT_SECRET)%'
+    backup.path: '%kernel.project_dir%/data/storage/backup'
+    backup.older_limit: '%env(BACKUP_OLDER_LIMIT)%'
+    test.disable_some_tests: '%env(DISABLE_SOME_TESTS)%'
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # NOTE: PLease import the files inside src/services.yaml
+
+    App\Infrastructure\Command\BackupDbCommand:
+        arguments:
+            $backupOlderLimit : '%backup.older_limit%'
+        
+    App\Infrastructure\Service\Backup\MySQL\MysqlBackupService:
+        arguments:
+            $databaseUrl: '%app.database_url%'

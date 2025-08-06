@@ -1,0 +1,27 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "Kernel.php",
+            "/\\.interface\\.php/",
+            "{Infrastructure/DB/.*}",
+            "{Infrastructure/Command/.*}",
+            "{Infrastructure/Service/Backup/.*}",
+            "{Infrastructure/DTO/.*}",
+            "{Infrastructure/Repositories/.*}",
+            "{Infrastructure/Controllers/OpenApiViewer.php}",
+        ]
+    },
+    "logs": {
+        "text": "var/tests/reports/infection.log",
+        "html": "var/tests/reports/infection.html",
+        "json": "var/tests/reports/infection.json"
+    },
+    "mutators": {
+        "@default": true
+    },
+    "minMsi": 100
+}

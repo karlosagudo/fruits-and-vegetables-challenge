@@ -1,0 +1,11 @@
+{
+    "http-basic": {
+      "nexus.evolucare.io": {
+        "username": "GITLAB_USERNAME",
+        "password": "GITLAB_PASSWORD"
+      }
+    },
+    "gitlab-oauth": {
+      "gitlab.evolucare.io": "GITLAB_TOKEN"
+    }
+  }

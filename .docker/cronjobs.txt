@@ -1,0 +1,1 @@
+0 4 * * * /usr/local/bin/php /srv/app/bin/console app:backup-db 2>&1

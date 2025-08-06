@@ -1,0 +1,26 @@
+includes:
+	- ./phpstan-baseline.neon
+
+parameters:
+    level: 8
+    tmpDir: var/cache/PHPStan
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+        - tests/Architecture/
+    excludePaths:
+        analyseAndScan:
+            - src/Application/Exceptions
+            - src/Infrastructure/DB/Fixtures/
+            - src/Kernel.php
+            - tests
+    phpat:
+        ignore_built_in_classes: true
+        show_rule_names: true
+services:
+    -
+        class: App\Tests\Architecture\HexagonalTest
+        tags:
+            - phpat.test

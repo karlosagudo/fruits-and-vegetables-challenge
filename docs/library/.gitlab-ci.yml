@@ -1,0 +1,12 @@
+include:
+    - project: 'factory/gitlab-ci/templates'
+        ref: 'main'
+        file: '/symfony-bundle.gitlab-ci.yml'
+
+php_psalm:
+    stage: test
+    extends: .php_psalm
+    needs:
+        - php_composer_install
+    rules:
+        - when: never

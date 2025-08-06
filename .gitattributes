@@ -1,0 +1,18 @@
+#default all files with LF
+* text eol=lf
+*	text=lf
+#images as binaries
+*.png binary
+*.svg binary
+*.gif binary
+*.jpg binary
+*.jpeg binary
+*.PNG binary
+*.SVG binary
+*.GIF binary
+*.JPG binary
+*.JPEG binary
+# font as binaries
+*.ttf binary
+*.mwb
+
