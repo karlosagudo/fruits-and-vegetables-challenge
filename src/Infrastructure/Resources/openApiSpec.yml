@@ -1,0 +1,161 @@
+openapi: 3.1.0
+info:
+    title: Food
+    version: '1.0'
+    summary: 'Food api spec'
+    description: 'Fruits and Vegetables challenge'
+    contact:
+        name: 'Karlos Agudo'
+        url: https://github.com/karlosagudo
+        email: karlosagudo1978@gmail.com
+    license:
+        name: MIT
+        identifier: MIT
+servers:
+    -
+        url: 'http://localhost:3000/api/Food'
+paths:
+    /foods:
+        get:
+            operationId: listFood
+            summary: 'Food list'
+            description: 'Food list'
+            tags:
+                - food
+            parameters:
+                -
+                    name: pageSize
+                    in: query
+                    schema:
+                        type: integer
+                    description: 'results per page'
+                -
+                    name: pageNumber
+                    in: query
+                    schema:
+                        type: integer
+                    description: 'page to show'
+                -
+                    name: type
+                    in: query
+                    schema:
+                        type: string
+                        enum: ['fruit', 'vegetable']
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema: { type: array, items: { $ref: '#/components/schemas/Food' } }
+    /food:
+        post:
+            operationId: createFood
+            summary: 'Food create'
+            description: 'Food create'
+            tags:
+                - food
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Food'
+            responses:
+                201:
+                    description: Created
+                422:
+                    description: 'Unprocessable Entity (WebDAV)'
+    '/food/{id}':
+        parameters:
+            -
+                name: id
+                in: path
+                schema:
+                    type: integer
+                description: id
+                required: true
+        get:
+            operationId: getFood
+            summary: 'Food get'
+            description: 'Food get'
+            tags:
+                - food
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema: { $ref: '#/components/schemas/Food' }
+                404:
+                    description: 'Not Fount'
+        delete:
+            operationId: deleteFood
+            summary: 'Food delete'
+            description: 'Food delete'
+            tags:
+                - food
+            responses:
+                205:
+                    description: 'Reset Content'
+                404:
+                    description: 'Not Fount'
+        put:
+            operationId: updateFood
+            summary: 'Food update'
+            description: 'Food update'
+            tags:
+                - food
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Food'
+            responses:
+                202:
+                    description: Accepted
+                404:
+                    description: 'Not Fount'
+                422:
+                    description: 'Unprocessable Entity (WebDAV)'
+components:
+    schemas:
+        Food:
+            title: Food
+            type: object
+            description: 'food model'
+            x-original-name: food
+            required:
+                - id
+                - name
+                - type
+                - quantity
+                - unit
+            properties:
+                id:
+                    type: integer
+                    example: 6
+                    x-original-name: id
+                    x-auto-increment: true
+                    x-identifier: true
+                name:
+                    type: string
+                    example: 'sample text'
+                    maxLength: 255
+                    x-original-name: name
+                type:
+                    type: string
+                    example: 'sample text'
+                    maxLength: 255
+                    x-original-name: type
+                quantity:
+                    type: integer
+                    example: 6
+                    x-original-name: quantity
+                unit:
+                    type: string
+                    example: 'sample text'
+                    maxLength: 255
+                    x-original-name: unit
+tags:
+    -
+        name: food
+        description: 'Food operations'

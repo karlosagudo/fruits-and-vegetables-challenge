@@ -1,4 +1,4 @@
-### Production base
+### DEVELOP ONLY
 FROM php:8.2-fpm-alpine AS app_php_local
 
 WORKDIR /srv/app
@@ -30,6 +30,8 @@ RUN set -eux; \
     mkdir -p /var/run/php;
 
 ENV APP_ENV=dev
+
+COPY . .
 
 # Remove root password
 RUN passwd -d root
@@ -72,5 +74,8 @@ RUN chmod +x bin/console; sync
 
 COPY .docker/local-entrypoint.sh /usr/local/bin/local-entrypoint
 RUN chmod +x /usr/local/bin/local-entrypoint
+
+RUN setfacl -dR -m u:$(whoami):rwX -m u:$(whoami):rwX var
+RUN setfacl -R -m u:$(whoami):rwX -m u:$(whoami):rwX var
 
 ENTRYPOINT ["local-entrypoint"]

@@ -5,8 +5,6 @@ declare(strict_types=1);
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
-use Evolucare\JwtSecurity\EvolucareJwtSecurity;
-use League\FlysystemBundle\FlysystemBundle;
 use Nelmio\CorsBundle\NelmioCorsBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -28,8 +26,6 @@ return [
     SecurityBundle::class => ['all' => true],
     MonologBundle::class => ['all' => true],
     MakerBundle::class => ['dev' => true],
-    DoctrineFixturesBundle::class => ['all' => true],
+    DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     NelmioCorsBundle::class => ['all' => true],
-    EvolucareJwtSecurity::class => ['all' => true],
-    FlysystemBundle::class => ['all' => true],
 ];

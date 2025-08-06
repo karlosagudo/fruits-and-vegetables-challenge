@@ -1,6 +1,47 @@
 # Local Docker Developing
 
-## Pre-installations advices
+## With Docker already installed:
+
+Execute to build the images
+```make build```
+
+To install project , composer dependencies etc..
+```make init```
+
+To run web server:
+```make start```
+
+## Run container
+
+To run docker container. This will land into `/app` container folder where we can find our repository.
+```make shell```
+
+## Git Hooks IMPORTANT
+
+Follow documentation [here](docs/githooks.md)
+
+Install with:
+``` vendor/bin/captainhook install --only-enabled   ```
+or
+```make install-hooks```
+
+## Some problems on docker:
+If there is problems with the docker setup for the permissions on var/cache or var/logs:
+ONLY IN LOCAL:
+```
+chmod 777 -R var
+```
+
+Could happen with the mariadb container, some permissions problems with the mysql volume:
+```
+sudo chown ${WHOAMI}:${WHOAMI} -R ./mysql
+```
+And maybe
+```
+sudo rm -rf ./mysql
+```
+
+## Pre-installations advices in case you need to install docker
 
 This is well known issues with windows filesystems and docker. If you expose in a Linux image a volume into the windows filesystem, the performance decreases dramatically, then is not possible to work it in a good conditions.
 
@@ -35,33 +76,7 @@ Later we can refer to this IP if we need to communicate microservices each other
 MSVNTW_EHW_AGENDA_API_IP=172.23.0.3
 MSVNTW_EHW_LOG_API_IP=172.23.0.5
 ...
-```
-
-Since our dockers uses internal images in a private registry, we need to login within your OS shell with our Evolucare credentials prior to use it:
-`docker login docker.evolucare.io`
-`docker login docker-dev.evolucare.io`
-(use your email without @evolucare.com)
-
-Then install and stand up docker
-```make build```
-
-To install project run
-```make init```
-
-## Run container
-
-To run docker container. This will land into `/app` container folder where we can find our repository.
-```make shell```
-
-## Database
-
-Ask for database root password for production server at 10.107.130.229 then run the following commands
-from your OS shell (not docker):
-
-1. ```mysqldump -h 10.107.130.229 -u root -p {DATABASE_NAME} > {DATABASE_NAME}.sql```
-2. Create local database `{DATABASE_NAME}` with mysql command in mysql-client:
-```mysql -h 127.0.0.1 -u root -P {DOCKER_MYSQL_PORT} -e "CREATE DATABASE {DATABASE_NAME}"```
-3. ```mysql -h 127.0.0.1 -u root -P {DOCKER_MYSQL_PORT} {DATABASE_NAME} < {DATABASE_NAME}.sql```
+```````
 
 ## Run the app
 

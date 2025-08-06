@@ -1,0 +1,48 @@
+# Used for the UI JS
+api_viewer:
+    path: /docs
+    methods: GET
+    controller: App\Infrastructure\Controllers\OpenApiViewer
+
+oauth_receiver:
+    path: /oauthreceiver
+    methods: GET
+    controller: App\Infrastructure\Controllers\OpenApiViewer::tokenReceiver
+
+# Spec in raw
+api_spec:
+    path: /spec
+    methods: GET
+    controller: App\Infrastructure\Controllers\OpenApiViewer::Spec
+
+ListFood:
+    path: /foods
+    controller: App\Infrastructure\Controllers\Food\ListFoodController
+    methods: GET
+    
+CreateFood:
+    path: /food
+    controller: App\Infrastructure\Controllers\Food\CreateFoodController
+    methods: POST
+    
+GetFood:
+    path: /food/{id}
+    controller: App\Infrastructure\Controllers\Food\GetFoodController
+    methods: GET
+    requirements:
+        id: '\d+'
+            
+UpdateFood:
+    path: /food/{id}
+    controller: App\Infrastructure\Controllers\Food\UpdateFoodController
+    methods: PUT
+    requirements:
+        id: '\d+'
+            
+DeleteFood:
+    path: /food/{id}
+    controller: App\Infrastructure\Controllers\Food\DeleteFoodController
+    methods: DELETE
+    requirements:
+        id: '\d+'
+            

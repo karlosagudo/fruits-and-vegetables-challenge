@@ -1,6 +1,0 @@
-evolucare_jwt_security:
-  host: '%env(KEYCLOAK_HOST)%'
-  client_id: '%env(KEYCLOAK_CLIENT_ID)%'
-  client_secret: '%env(KEYCLOAK_CLIENT_SECRET)%'
-  realm: '%env(KEYCLOAK_REALM)%'
-  public_key_dir_path: '%kernel.cache_dir%/jwt_key'

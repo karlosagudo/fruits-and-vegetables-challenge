@@ -23,15 +23,14 @@ This project its based in a standard symfony project including:
 | [PHP mess detector](https://phpmd.org/documentation/index.html) | latest  | *   |
 
 
-## :ok_hand: How to use this template in other projects
-
-Since this repository is still not a template project inside gitlab, we need to do some extra
-steps in order to be used as starter in others projects
-Follow instructions on: [tutorial](docs/tutorial.md)
-
 ## :star: How to install / use with docker
 
 Follow instructions on: [install](docs/install.md)
+
+If there is some problems on docker with the mariadb container:
+```
+sudo chown ${WHOAMI}:${WHOAMI} -R ./mysql
+```
 
 ## :writing_hand: How to write the api contract
 

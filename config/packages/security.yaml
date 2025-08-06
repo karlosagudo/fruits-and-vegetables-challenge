@@ -15,8 +15,6 @@ security:
 
             pattern: ^/
             stateless: true
-            custom_authenticators:
-                - Evolucare\JwtSecurity\JwtTokenAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -29,8 +27,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/api/docs, roles: PUBLIC_ACCESS }
-        - { path: ^/api/spec, roles: PUBLIC_ACCESS }
+        - { path: ^/api/Food/docs, roles: PUBLIC_ACCESS }
+        - { path: ^/api/Food/spec, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

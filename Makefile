@@ -111,4 +111,4 @@ release:
 	@sh ./release.sh
 
 install-hooks: # install hooks
-	@vendor/bin/captainhook install --only-enabled
+	@docker exec -u root -ti ${DOCKER_IMAGE_NAME}-1 sh -c './vendor/bin/captainhook install --only-enabled ' $(args)

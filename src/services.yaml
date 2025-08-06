@@ -1,0 +1,31 @@
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # we need to redefine this for the command/middlewares and query handlers
+    App\:
+        resource: '../src/'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    _instanceof:
+        App\Infrastructure\Bus\CommandMiddlewares\CommandMiddlewareInterface:
+            tags: [ 'infrastructure.command.middleware' ]
+        App\Application\CommandHandlerInterface:
+            tags: [ 'application.command.handler' ]
+        App\Application\QueryHandlerInterface:
+            tags: [ 'application.query.handler' ]
+
+    App\Infrastructure\Bus\MiddlewarePipelineFactory:
+        arguments:
+            - !tagged_locator 'infrastructure.command.middleware'
+
+    App\Infrastructure\Bus\CommandMiddleWares\CommandHandlerSelectorMiddleware:
+        arguments:
+            - !tagged_locator 'application.command.handler'
+
+    App\Infrastructure\Bus\QueryBus:
+        arguments:
+            - !tagged_locator 'application.query.handler'

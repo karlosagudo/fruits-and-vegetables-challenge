@@ -34,10 +34,12 @@ class WithErrorMessageErrorControllerTest extends WebTestCase
 
         // Then
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        $content = json_decode($response->getContent(), true);
         self::assertEquals(
-            ['message' => 'No route found for "GET http://localhost/api/vitalSigns/invalidroute"'],
-            json_decode($response->getContent(), true)
+            'No route found for "GET http://localhost/api/vitalSigns/invalidroute"',
+            $content['message']
         );
+        self::assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
     public function testInvalidArgumentException(): void
@@ -48,6 +50,25 @@ class WithErrorMessageErrorControllerTest extends WebTestCase
         $expectedResponse = new JsonResponse(
             ['message' => 'test'],
             Response::HTTP_BAD_REQUEST,
+            $headers,
+        );
+        $sut = new WithErrorMessageErrorController();
+
+        // When
+        $response = ($sut)($exception);
+
+        // Then
+        self::assertEquals($expectedResponse, $response);
+    }
+
+    public function testOtherException(): void
+    {
+        // Given
+        $exception = new \RuntimeException('test');
+        $headers = FlattenException::createFromThrowable($exception)->getHeaders();
+        $expectedResponse = new JsonResponse(
+            ['message' => 'test'],
+            500,
             $headers,
         );
         $sut = new WithErrorMessageErrorController();

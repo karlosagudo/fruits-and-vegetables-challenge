@@ -33,7 +33,13 @@ final class HexagonalTest
                 Selector::inNamespace('App\Domain'),
                 Selector::inNamespace('App\Infrastructure\DTO'),
                 // Exceptions
-                Selector::inNamespace('Symfony\Component\EventDispatcher')
+                Selector::inNamespace('Symfony\Component\EventDispatcher'),
+                Selector::inNamespace('Symfony\Component\Uid'),
+                // for getting user on security
+                Selector::inNamespace('Symfony\Bundle\SecurityBundle'),
+                Selector::inNamespace('Doctrine\Common\Collections'),
+                Selector::inNamespace('Doctrine\ORM'),
+                Selector::inNamespace('Evolucare\JwtSecurity'),
             )
             ->because('Application must depend only on domain and EventSubscriberInterface - this will break our architecture, implement it another way! see /docs/hexagonal.md')
         ;
