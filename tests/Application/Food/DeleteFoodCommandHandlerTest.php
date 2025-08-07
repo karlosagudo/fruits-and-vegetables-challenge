@@ -40,11 +40,12 @@ class DeleteFoodCommandHandlerTest extends TestCase
 
     public function testFoodNotFound(): void
     {
+        $id = random_int(1, 100);
         $mockRepository = $this->createMock(FoodRepositoryInterface::class);
         $mockRepository->expects(self::once())->method('find')
-            ->with(1, true)->willReturn(null)
+            ->with($id, true)->willReturn(null)
         ;
-        $id = 1;
+
         $query = new DeleteFoodCommand($id);
         $sutHandler = new DeleteFoodCommandHandler($mockRepository);
         $this->expectException(EntityNotFound::class);

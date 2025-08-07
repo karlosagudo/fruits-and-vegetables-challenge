@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Food;
 
+use App\Application\Exceptions\EntityNotFound;
 use App\Application\QueryHandlerInterface;
 use App\Application\QueryInterface;
 use App\Domain\Repositories\FoodRepositoryInterface;
@@ -21,9 +22,21 @@ final readonly class ListFoodQueryHandler implements QueryHandlerInterface
      * @param ListFoodQuery $query
      *
      * @return array|mixed[]
+     *
+     * @throws EntityNotFound
      */
     public function handle(QueryInterface $query): array
     {
-        return $this->foodRepository->list([], null, $query->pageNumber, $query->pageSize);
+        $foods = $this->foodRepository->list(
+            filters: [],
+            order: ['id' => 'DESC'],
+            limit: $query->pageSize,
+            offset: $query->pageNumber
+        );
+        if (0 === count($foods)) {
+            throw new EntityNotFound('Food not found.');
+        }
+
+        return $foods;
     }
 }

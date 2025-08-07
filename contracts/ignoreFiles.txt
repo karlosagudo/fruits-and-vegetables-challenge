@@ -1,2 +1,5 @@
 src/Infrastructure/Controllers/Food/DeleteFoodController.php
+src/Application/Food/DeleteFoodCommandHandler.php
 tests/HelpersTest/GetRelationsSingleton.php
+tests/Application/Food/GetFoodQueryHandlerTest.php
+test/Application/Food/DeleteFoodCommandHandler.php
