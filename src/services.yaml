@@ -5,14 +5,8 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     # we need to redefine this for the command/middlewares and query handlers
-    App\Application\:
-        resource: '../src/Application'
-    App\Infrastructure\Bus\:
-        resource: '../src/Infrastructure/Bus'
-    App\Application\Subscribers\:
-        resource: '../src/Application/Subscribers'
-    App\Application\Services\:
-        resource: '../src/Application/Services'
+    App\:
+        resource: '../src/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

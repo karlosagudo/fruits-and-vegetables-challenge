@@ -19,6 +19,10 @@ interface FoodRepositoryInterface
 {
     public function save(Food $food): void;
 
+    public function persist(Food $food): void;
+
+    public function flush(): void;
+
     /**
      * @return ($returnEntity is true ? null|Food: FoodFlatten[])
      */
@@ -33,4 +37,11 @@ interface FoodRepositoryInterface
      * @return FoodFlatten[] array
      */
     public function list(array $filters, ?array $order, ?int $limit = null, ?int $offset = null): array;
+
+    /**
+     * @param int[] $ids
+     *
+     * @return Food[]
+     */
+    public function getByIds(array $ids): array;
 }

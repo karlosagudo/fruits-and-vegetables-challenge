@@ -41,6 +41,16 @@ final readonly class DoctrineFoodRepository implements FoodRepositoryInterface
         $this->entityManager->flush();
     }
 
+    public function persist(Food $food): void
+    {
+        $this->entityManager->persist($food);
+    }
+
+    public function flush(): void
+    {
+        $this->entityManager->flush();
+    }
+
     /**
      * @return ($returnEntity is true ? null|Food: FoodFlatten[])
      */
@@ -104,27 +114,25 @@ final readonly class DoctrineFoodRepository implements FoodRepositoryInterface
         return array_map(self::flattenEntity(...), $objects);
     }
 
+    /**
+     * @param int[] $ids
+     */
+    public function getByIds(array $ids): array
+    {
+        $queryBuilder = $this->entityRepository->createQueryBuilder('e')
+            ->select('e')
+            ->where('e.id IN (:ids)')
+            ->setParameter('ids', $ids)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     private function fullRelationsQuery(): QueryBuilder
     {
         return $this->entityRepository->createQueryBuilder('e')
             ->select('e')
         ;
-    }
-
-    /**
-     * @param array<string, mixed> $object
-     *
-     * @return FoodFlatten array
-     */
-    private function flattenEntity(array $object): array
-    {
-        $result['id'] = $object['id'];
-        $result['name'] = $object['name'];
-        $result['type'] = $object['type'];
-        $result['quantity'] = $object['quantity'];
-        $result['unit'] = $object['unit'];
-
-        return $result;
     }
 
     /**
@@ -162,5 +170,21 @@ final readonly class DoctrineFoodRepository implements FoodRepositoryInterface
         }
 
         return $queryBuilderDistinct;
+    }
+
+    /**
+     * @param array<string, mixed> $object
+     *
+     * @return FoodFlatten array
+     */
+    private function flattenEntity(array $object): array
+    {
+        $result['id'] = $object['id'];
+        $result['name'] = $object['name'];
+        $result['type'] = $object['type']->value;
+        $result['quantity'] = $object['quantity'];
+        $result['unit'] = $object['unit'];
+
+        return $result;
     }
 }

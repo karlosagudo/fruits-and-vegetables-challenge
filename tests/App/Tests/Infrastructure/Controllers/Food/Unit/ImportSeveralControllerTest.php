@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Infrastructure\Controllers\Food\Unit;
 
-use App\Application\Food\CreateFoodCommand;
+use App\Application\Food\ImportSeveralCommand;
 use App\Domain\Models\FoodType;
 use App\Infrastructure\Bus\CommandBusInterface;
-use App\Infrastructure\Controllers\Food\CreateFoodController;
+use App\Infrastructure\Controllers\Food\Import\ImportSeveralController;
 use App\Infrastructure\DTO\FoodDTO;
 use Faker\Factory;
 use PHPUnit\Framework\TestCase;
@@ -19,9 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @internal
  *
- * @covers \App\Infrastructure\Controllers\Food\CreateFoodController
+ * @covers \App\Infrastructure\Controllers\Food\Import\ImportSeveralController
  */
-class CreateFoodControllerTest extends TestCase
+class ImportSeveralControllerTest extends TestCase
 {
     public function testHappyPath(): void
     {
@@ -40,16 +40,16 @@ class CreateFoodControllerTest extends TestCase
         $commandBusMock->expects(self::once())
             ->method('handle')
             ->with(
-                new CreateFoodCommand(
-                    $dto,
+                new ImportSeveralCommand(
+                    [$dto],
                 )
             )
         ;
-        $sut = new CreateFoodController($commandBusMock);
+        $sut = new ImportSeveralController($commandBusMock);
 
         // When
         $result = ($sut)(
-            $dto,
+            [$dto],
         );
 
         // Then

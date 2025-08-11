@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Application\Food;
 
 use App\Application\Food\CreateFoodCommand;
+use App\Domain\Models\FoodType;
 use App\Infrastructure\DTO\FoodDTO;
 use App\Tests\HelpersTest\createDTOMockAndRepoForClass;
 use Faker\Factory;
@@ -26,7 +27,7 @@ class CreateFoodCommandTest extends TestCase
         $faker = Factory::create('fr_FR');
         $newId = 1;
         $name = $faker->text(255);
-        $type = $faker->text(255);
+        $type = $faker->randomElement(FoodType::cases());
         $quantity = $faker->numberBetween(1, 1000);
         $unit = $faker->text(255);
 

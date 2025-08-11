@@ -7,6 +7,7 @@ namespace App\Tests\Application\Food;
 use App\Application\Exceptions\EntityNotFound;
 use App\Application\Food\UpdateFoodCommand;
 use App\Application\Food\UpdateFoodCommandHandler;
+use App\Domain\Models\FoodType;
 use App\Domain\Repositories\FoodRepositoryInterface;
 use App\Infrastructure\DTO\FoodDTO;
 use App\Tests\HelpersTest\createDTOMockAndRepoForClass;
@@ -41,7 +42,7 @@ final class UpdateFoodCommandHandlerTest extends TestCase
             new FoodDTO(
                 1,
                 $faker->name(),
-                $faker->text(),
+                $faker->randomElement(FoodType::cases()),
                 $faker->numberBetween(1, 1000),
                 $faker->text(),
             )
@@ -69,7 +70,7 @@ final class UpdateFoodCommandHandlerTest extends TestCase
 
         $newId = 1;
         $name = $faker->text(255);
-        $type = $faker->text(255);
+        $type = $faker->randomElement(FoodType::cases());
         $quantity = $faker->numberBetween(1, 1000);
         $unit = $faker->text(255);
 

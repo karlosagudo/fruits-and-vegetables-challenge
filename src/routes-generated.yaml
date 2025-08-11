@@ -46,3 +46,8 @@ DeleteFood:
     requirements:
         id: '\d+'
             
+ImportSeveral:
+    path: /food/import
+    controller: App\Infrastructure\Controllers\Food\Import\ImportSeveralController
+    methods: POST
+    

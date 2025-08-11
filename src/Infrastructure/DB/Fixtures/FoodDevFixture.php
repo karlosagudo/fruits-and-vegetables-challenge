@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\DB\Fixtures;
 
 use App\Domain\Models\Food;
+use App\Domain\Models\FoodType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -26,7 +27,7 @@ class FoodDevFixture extends Fixture implements FixtureGroupInterface
             $food = new Food(
                 $id,
                 $faker->text(255),
-                $faker->text(255),
+                $faker->randomElement(FoodType::cases()),
                 $faker->numberBetween(1, 1000),
                 $faker->text(255),
             );
