@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Domain\Models;
 
 use App\Domain\Models\Food;
+use App\Domain\Models\FoodType;
 use App\Tests\HelpersTest\TestDomainEvents;
 use Faker\Factory;
 use PHPUnit\Framework\TestCase;
@@ -27,11 +28,11 @@ final class FoodTest extends TestCase
         $faker = Factory::create('fr_FR');
 
         $food = Food::create(
-            1,
-            $faker->text(255),
-            $faker->text(255),
-            $faker->numberBetween(1, 1000),
-            $faker->text(255),
+            id: 1,
+            name: $faker->text(255),
+            type: $faker->randomElement(FoodType::cases()),
+            quantity: $faker->numberBetween(1, 1000),
+            unit: $faker->text(255),
         );
 
         $this->assertInstanceOf(Food::class, $food);
@@ -47,11 +48,11 @@ final class FoodTest extends TestCase
         $faker = Factory::create('fr_FR');
         $original = clone $food;
         $food->update(
-            $faker->numberBetween(1, 10),
-            $faker->text(255),
-            $faker->text(255),
-            $faker->numberBetween(1, 1000),
-            $faker->text(255),
+            id: $faker->numberBetween(1, 10),
+            name: $faker->text(255),
+            type: $faker->randomElement(FoodType::cases()),
+            quantity: $faker->numberBetween(1, 1000),
+            unit: $faker->text(255),
         );
         $this->assertNotSame($original, $food);
     }

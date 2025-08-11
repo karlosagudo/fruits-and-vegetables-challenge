@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Infrastructure\Controllers\Food;
 
+use App\Domain\Models\FoodType;
 use App\Infrastructure\DB\Fixtures\FoodTestFixture;
 use App\Infrastructure\DTO\FoodDTO;
 use App\Tests\HelpersTest\GetRelationsSingleton;
@@ -54,7 +55,7 @@ class CrudFoodControllerTest extends WebTestCase
             [
                 'id' => $mainId,
                 'name' => 'test',
-                'type' => 'fruit',
+                'type' => FoodType::VEGETABLE,
                 'quantity' => 5,
                 'unit' => 'g',
             ]
@@ -76,7 +77,7 @@ class CrudFoodControllerTest extends WebTestCase
             [
                 'id' => $mainId,
                 'name' => 'testUpdated',
-                'type' => 'fruit',
+                'type' => FoodType::FRUIT,
                 'quantity' => 5,
                 'unit' => 'g',
             ]

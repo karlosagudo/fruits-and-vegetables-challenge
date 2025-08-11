@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Infrastructure\Controllers\Food\Unit;
 
 use App\Application\Food\UpdateFoodCommand;
+use App\Domain\Models\FoodType;
 use App\Infrastructure\Bus\CommandBusInterface;
 use App\Infrastructure\Controllers\Food\UpdateFoodController;
 use App\Infrastructure\DTO\FoodDTO;
@@ -32,7 +33,7 @@ class UpdateFoodControllerTest extends TestCase
         $dto = new FoodDTO(
             1,
             $faker->name(),
-            $faker->text(),
+            $faker->randomElement(FoodType::cases()),
             $faker->numberBetween(1, 1000),
             $faker->text(),
         );

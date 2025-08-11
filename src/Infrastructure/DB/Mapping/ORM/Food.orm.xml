@@ -5,7 +5,7 @@
       <generator strategy="IDENTITY"/>
     </id>
     <field name="name" column="name" type="string" length="255"/>
-    <field name="type" column="type" type="string" length="255"/>
+    <field name="type" column="type" type="string" enum-type="App\Domain\Models\FoodType" length="255"/>
     <field name="quantity" column="quantity" type="integer"/>
     <field name="unit" column="unit" type="string" length="255"/>
   </entity>

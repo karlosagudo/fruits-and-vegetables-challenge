@@ -7,27 +7,29 @@ namespace App\Domain\Models;
 class Food
 {
     /**
-     * @param string $name Ex: sample text
-     * @param string $type Ex: sample text
-     * @param int $quantity Ex: 6
-     * @param string $unit Ex: sample text                    */
+     * @param string   $name     Ex: sample text
+     * @param FoodType $type     Ex: sample text
+     * @param int      $quantity Ex: 6
+     * @param string   $unit     Ex: sample text
+     */
     public function __construct(
         public int $id,
         public string $name,
-        public string $type,
+        public FoodType $type,
         public int $quantity,
         public string $unit,
     ) {}
 
     /**
-     * @param string $name Ex: sample text
-     * @param string $type Ex: sample text
-     * @param int $quantity Ex: 6
-     * @param string $unit Ex: sample text                    */
+     * @param string   $name     Ex: sample text
+     * @param FoodType $type     Ex: sample text
+     * @param int      $quantity Ex: 6
+     * @param string   $unit     Ex: sample text
+     */
     public static function create(
         int $id,
         string $name,
-        string $type,
+        FoodType $type,
         int $quantity,
         string $unit,
     ): self {
@@ -41,14 +43,15 @@ class Food
     }
 
     /**
-     * @param string $name Ex: sample text
-     * @param string $type Ex: sample text
-     * @param int $quantity Ex: 6
-     * @param string $unit Ex: sample text                    */
+     * @param string   $name     Ex: sample text
+     * @param FoodType $type     Ex: sample text
+     * @param int      $quantity Ex: 6
+     * @param string   $unit     Ex: sample text
+     */
     public function update(
         int $id,
         string $name,
-        string $type,
+        FoodType $type,
         int $quantity,
         string $unit,
     ): self {

@@ -116,6 +116,21 @@ paths:
                     description: 'Not Fount'
                 422:
                     description: 'Unprocessable Entity (WebDAV)'
+    /food/import:
+        post:
+            operationId: 'Import Several'
+            summary: 'Import Several food items(request.json)'
+            description: 'import food'
+            tags:
+                - food
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/Food'
+
 components:
     schemas:
         Food:
@@ -138,12 +153,13 @@ components:
                     x-identifier: true
                 name:
                     type: string
-                    example: 'sample text'
+                    example: 'Carrot'
                     maxLength: 255
                     x-original-name: name
                 type:
                     type: string
-                    example: 'sample text'
+                    enum: ['fruit', 'vegetable']
+                    example: 'vegetable'
                     maxLength: 255
                     x-original-name: type
                 quantity:
@@ -152,7 +168,7 @@ components:
                     x-original-name: quantity
                 unit:
                     type: string
-                    example: 'sample text'
+                    example: 'g'
                     maxLength: 255
                     x-original-name: unit
 tags:
