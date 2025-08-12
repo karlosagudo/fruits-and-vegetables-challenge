@@ -1,14 +1,64 @@
-# Openapi Symfony
+# Fruits and Vegetables Challenge
 
-This project is intended to be used as a template, so if this project it's not a template please clone this project, delete the .git folder, and the push to another repository.
+Complete API with a small front with 100% coverage in unit testing, also functional testing, and 100% infection code coverage.
+
+Most of the code has been generated with a custom handmade generator from openapi to symfony hexagonal.
+
+## :star: How to install / use with docker
+
+There is a makefile to start easily with the project, but the correct sequence could be.
+
+Copy the env.local.dist and generate your own env.local.
+DOCKER_HTTP_PORT=8090 Its were the front (swagger-style) api will exists:
+enter in the browser http://localhost:8090 and will redirect you to http://localhost:8090/api/Foods
+
+### With Docker already installed:
+
+Execute to build the images
+```make build```
+
+To install project , composer dependencies etc..
+```make init```
+
+To run web server:
+```make start```
+
+### Run container
+
+To run docker container. This will land into `/app` container folder where we can find our repository.
+```make shell```
+
+### Some problems on docker:
+If there is problems with the docker setup for the permissions on var/cache or var/logs:
+ONLY IN LOCAL:
+```
+chmod 777 -R var
+```
+
+Could happen with the mariadb container, some permissions problems with the mysql volume:
+```
+sudo chown ${WHOAMI}:${WHOAMI} -R ./mysql
+```
+And maybe
+```
+sudo rm -rf ./mysql
+```
+
+After this steps you should create the database:
+0. ```make shell```
+1. ```bin/console doctrine:database:create```
+2. ```bin/console doctrine:migrations:migrate```
+
+If you also want so fake data to interact with the API, we have generated some fixtures for dev environment and the
+ones used in test environment for the functional testing.
+
+3. ```bin/console doctrine:fixtures:load -n --group=develop```
+
 
 ## :rocket: What is included
 
-- [OpenApiExtractor](https://gitlab.evolucare.io/dpi/hopitalweb/api/openapi-ddd-extractor) A tool to extract code from an openapi contract.
 - [Makefile](Makefile) with some usefull commands to work with our project. (Use ```makefile help``` to list them)
-- Pipelines with standards [.gitlab-ci.yml](.gitlab-ci.yml)
 - [GitHooks](docs/githooks.md) Automatic formatting / cleaning, and testing on your local git precommit
-- An automated [backup system](docs/backups.md).
 - [Automatic changelog and release system](docs/releases.md)
 
 This project its based in a standard symfony project including:
@@ -27,63 +77,6 @@ This project its based in a standard symfony project including:
 
 Follow instructions on: [install](docs/install.md)
 
-If there is some problems on docker with the mariadb container:
-```
-sudo chown ${WHOAMI}:${WHOAMI} -R ./mysql
-```
-
-## :writing_hand: How to write the api contract
-
-Using these conventions the generator will extract more information about your domain:
-
-[Best Practices for Rest API DESIGN](docs/how-to-define-the-api.md)
-
-You have a working example in the contract folder called: blogpost.yml
-With examples of one-to-many and many-to-one
-
-## :wrench: How to use
-
-Since this project it's just a template, you should procure to it an open-api / swagger contract
-and then just execute this command, replacing <WHATEVERCONTRACT.yml> for the real file
-
-```bash
-vendor/bin/openapi-extractor contracts/<WHATEVERCONTRACT.yml>
-```
-
-If you dont want to overwrite your previous code, you can tell the extractor to extract to a different folder:
-
-```bash
-vendor/bin/openapi-extractor contracts/<WHATEVERCONTRACT.yml> -o anotherFolder
-```
-
-Or you can tell the extractor to read a ignoredFiles:
-
-```bash
-vendor/bin/openapi-extractor contracts/<WHATEVERCONTRACT.yml> -i contracts/ignoredFiles.txt
-```
-
-The ignoredFiles can be any file, for example ignoreGenerator.txt and in there, you can put several relatives paths for files in each line:
-```
-src/Application/Measure/ListMeasureVersionsQueryHandler.php
-src/Application/Measure/ListMeasureVersionsQuery.php
-```
-
-In this case, a warning will appear, but the files will never be overwritten:
-
-[warning] Ignored file:/home/cagudo/workspace/example-tutorial-blog/src/Application/Measure/ListMeasureQueryHandler.php
-
-There is a lot more information about this extractor in the [project folder](https://gitlab.evolucare.io/dpi/hopitalweb/api/openapi-ddd-extractor).
-
-After executing it, we advise to execute the init :
-
-```bash
-src/init.sh
-```
-
-This init will generate a first migration, and will run all fixtures also for test.
-
-After this you can enter into /api and you will have a swagger doc file to test .
-
 ## :books: More documentation
 
 ### Hexagonal and DDD
@@ -96,15 +89,3 @@ If you are new to hexagonal architecture or DDD please read this documentation:
 ### Migrations
 There is a detailed explanation about how we use and run migrations both locally and in the dev server.
 Please refer to the [migrations document](docs/migrations.md).
-
-
-## :woman_playing_water_polo: Develop / play around
-For develop/ play with different contracts :
-
-```bash
-git clean -f -d && rm -rf tests && vendor/bin/openapi-extractor contracts/<YOURCONTRACT>.yml -o ./
-```
-
-
-TODO:
-Tests and fixtures with g or kg

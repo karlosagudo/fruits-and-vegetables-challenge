@@ -27,8 +27,12 @@ final readonly class ListFoodQueryHandler implements QueryHandlerInterface
      */
     public function handle(QueryInterface $query): array
     {
+        $filters = [];
+        if ($query->type) {
+            $filters = ['type' => $query->type];
+        }
         $foods = $this->foodRepository->list(
-            filters: [],
+            filters: $filters,
             order: ['id' => 'DESC'],
             limit: $query->pageSize,
             offset: $query->pageNumber

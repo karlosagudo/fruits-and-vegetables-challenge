@@ -21,15 +21,16 @@ class FoodDevFixture extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+        $units = ['g', 'kg'];
         for ($i = 0; $i < self::NUMBER_OBJECT; ++$i) {
             $id = $i + 1;
 
-            $food = new Food(
-                $id,
-                $faker->text(255),
-                $faker->randomElement(FoodType::cases()),
-                $faker->numberBetween(1, 1000),
-                $faker->text(255),
+            $food = Food::create(
+                id: $id,
+                name: $faker->text(255),
+                type: $faker->randomElement(FoodType::cases()),
+                quantity: $faker->numberBetween(1, 1000),
+                unit: $faker->randomElement($units),
             );
 
             $manager->persist($food);

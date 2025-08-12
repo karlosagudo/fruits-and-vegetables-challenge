@@ -41,7 +41,7 @@ class ShapeTester extends TestCase
     /**
      * @param class-string $class
      */
-    public function testObject(string $class, string $data): void
+    public function testObject(string $class, mixed $data): void
     {
         $deserialize = self::$serializer?->deserialize(
             $data,

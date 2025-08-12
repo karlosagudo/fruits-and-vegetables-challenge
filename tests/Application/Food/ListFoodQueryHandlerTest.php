@@ -7,6 +7,7 @@ namespace App\Tests\Application\Food;
 use App\Application\Exceptions\EntityNotFound;
 use App\Application\Food\ListFoodQuery;
 use App\Application\Food\ListFoodQueryHandler;
+use App\Domain\Models\FoodType;
 use App\Domain\Repositories\FoodRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -64,6 +65,24 @@ class ListFoodQueryHandlerTest extends TestCase
             ->expects(self::once())
             ->method('list')
             ->with([], ['id' => 'DESC'], $pageSize, $pageNumber)
+            ->willReturn(['something'])
+        ;
+
+        $sutHandler = new ListFoodQueryHandler($mockRepository);
+        $sutHandler->handle($query);
+    }
+
+    public function testFoodListWithPaginateAndType(): void
+    {
+        $pageSize = random_int(1, 100);
+        $pageNumber = random_int(0, 25);
+        $type = FoodType::cases()[random_int(0, count(FoodType::cases()) - 1)];
+        $query = new ListFoodQuery(pageSize: $pageSize, pageNumber: $pageNumber, type: $type->value);
+        $mockRepository = $this->createMock(FoodRepositoryInterface::class);
+        $mockRepository
+            ->expects(self::once())
+            ->method('list')
+            ->with(['type' => $type->value], ['id' => 'DESC'], $pageSize, $pageNumber)
             ->willReturn(['something'])
         ;
 
