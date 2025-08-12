@@ -51,7 +51,7 @@ class ImportSeveralControllerTest extends WebTestCase
                 'name' => 'sample text',
                 'type' => 'fruit',
                 'quantity' => 6,
-                'unit' => 'sample text',
+                'unit' => 'kg',
             ]]
         );
         $this->client->getResponse();

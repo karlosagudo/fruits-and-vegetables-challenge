@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\Models;
 
+use App\Domain\Exceptions\InvalidUnitDomain;
 use App\Domain\Models\Food;
 use App\Domain\Models\FoodType;
 use App\Tests\HelpersTest\TestDomainEvents;
@@ -13,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @group Unit
  *
+ * @covers \App\Domain\Exceptions\InvalidUnitDomain
  * @covers \App\Domain\Models\Food
  *
  * @internal
@@ -32,7 +34,27 @@ final class FoodTest extends TestCase
             name: $faker->text(255),
             type: $faker->randomElement(FoodType::cases()),
             quantity: $faker->numberBetween(1, 1000),
-            unit: $faker->text(255),
+            unit: 'g',
+        );
+
+        $this->assertInstanceOf(Food::class, $food);
+
+        return $food;
+    }
+
+    public function testInvalidUnit(): Food
+    {
+        $faker = Factory::create('fr_FR');
+
+        $this->expectException(InvalidUnitDomain::class);
+        $this->expectExceptionMessage('The Unit badUnit does not exists');
+
+        $food = Food::create(
+            id: 1,
+            name: $faker->text(255),
+            type: $faker->randomElement(FoodType::cases()),
+            quantity: $faker->numberBetween(1, 1000),
+            unit: 'badUnit',
         );
 
         $this->assertInstanceOf(Food::class, $food);
@@ -47,13 +69,15 @@ final class FoodTest extends TestCase
     {
         $faker = Factory::create('fr_FR');
         $original = clone $food;
+        $quantity = $faker->numberBetween(1, 10);
         $food->update(
             id: $faker->numberBetween(1, 10),
             name: $faker->text(255),
             type: $faker->randomElement(FoodType::cases()),
-            quantity: $faker->numberBetween(1, 1000),
-            unit: $faker->text(255),
+            quantity: $quantity,
+            unit: 'kg',
         );
         $this->assertNotSame($original, $food);
+        $this->assertSame($quantity * 1000, $food->quantity);
     }
 }

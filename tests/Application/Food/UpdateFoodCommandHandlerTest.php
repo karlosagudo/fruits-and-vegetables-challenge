@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Application\Food;
 
 use App\Application\Exceptions\EntityNotFound;
+use App\Application\Exceptions\InvalidUnit;
 use App\Application\Food\UpdateFoodCommand;
 use App\Application\Food\UpdateFoodCommandHandler;
+use App\Domain\Exceptions\InvalidUnitDomain;
 use App\Domain\Models\FoodType;
 use App\Domain\Repositories\FoodRepositoryInterface;
 use App\Infrastructure\DTO\FoodDTO;
@@ -72,7 +74,7 @@ final class UpdateFoodCommandHandlerTest extends TestCase
         $name = $faker->text(255);
         $type = $faker->randomElement(FoodType::cases());
         $quantity = $faker->numberBetween(1, 1000);
-        $unit = $faker->text(255);
+        $unit = 'kg';
 
         $dto = new FoodDTO($newId, $name, $type, $quantity, $unit);
         $fakeCommand = new UpdateFoodCommand($id, $dto);
@@ -96,6 +98,43 @@ final class UpdateFoodCommandHandlerTest extends TestCase
         $sutCommandHandler = new UpdateFoodCommandHandler(
             $repository
         );
+        $sutCommandHandler->handle($fakeCommand);
+    }
+
+    public function testFoodUpdateBadUnit(): void
+    {
+        $faker = Factory::create('fr_FR');
+        $repository = $this->createMock(FoodRepositoryInterface::class);
+        $id = 27;
+
+        $newId = 267;
+        $name = $faker->text(255);
+        $type = $faker->randomElement(FoodType::cases());
+        $quantity = $faker->numberBetween(1, 1000);
+        $unit = $faker->text(255);
+
+        $dto = new FoodDTO($newId, $name, $type, $quantity, $unit);
+        $fakeCommand = new UpdateFoodCommand($id, $dto);
+        $fakeObject = $this->createMock('App\Domain\Models\Food');
+        $fakeObject->expects(self::once())
+            ->method('update')
+            ->with($id, $name, $type, $quantity, $unit)
+            ->willThrowException(new InvalidUnitDomain('The Unit '.$unit.' does not exists'))
+        ;
+
+        $fakeObject->unit = $unit;
+
+        $repository->expects(self::once())
+            ->method('find')
+            ->with($id, true)
+            ->willReturn($fakeObject)
+        ;
+
+        $sutCommandHandler = new UpdateFoodCommandHandler(
+            $repository
+        );
+        $this->expectException(InvalidUnit::class);
+        $this->expectExceptionMessage('The Unit '.$unit.' does not exists');
         $sutCommandHandler->handle($fakeCommand);
     }
 }

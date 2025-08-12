@@ -104,3 +104,7 @@ For develop/ play with different contracts :
 ```bash
 git clean -f -d && rm -rf tests && vendor/bin/openapi-extractor contracts/<YOURCONTRACT>.yml -o ./
 ```
+
+
+TODO:
+Tests and fixtures with g or kg

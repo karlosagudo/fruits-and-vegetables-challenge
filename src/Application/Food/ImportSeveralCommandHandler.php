@@ -6,6 +6,8 @@ namespace App\Application\Food;
 
 use App\Application\CommandHandlerInterface;
 use App\Application\CommandInterface;
+use App\Application\Exceptions\InvalidUnit;
+use App\Domain\Exceptions\InvalidUnitDomain;
 use App\Domain\Models\Food;
 use App\Domain\Repositories\FoodRepositoryInterface;
 use App\Infrastructure\DTO\FoodDTO;
@@ -18,6 +20,8 @@ final readonly class ImportSeveralCommandHandler implements CommandHandlerInterf
 
     /**
      * @param ImportSeveralCommand $command
+     *
+     * @throws InvalidUnit
      */
     public function handle(CommandInterface $command): void
     {
@@ -32,8 +36,12 @@ final readonly class ImportSeveralCommandHandler implements CommandHandlerInterf
         }
 
         foreach ($command->foodDTOCollection as $foodDto) {
-            /** @var FoodDTO $foodDto */
-            $food = $this->upsert($foodDto, $toUpdateIdValues);
+            // @var FoodDTO $foodDto
+            try {
+                $food = $this->upsert($foodDto, $toUpdateIdValues);
+            } catch (InvalidUnitDomain $exception) {
+                throw new InvalidUnit($exception->getMessage());
+            }
             $this->foodRepository->persist($food);
         }
         $this->foodRepository->flush();
@@ -41,6 +49,8 @@ final readonly class ImportSeveralCommandHandler implements CommandHandlerInterf
 
     /**
      * @param array<int, Food> $toUpdateIdValue
+     *
+     * @throws InvalidUnitDomain
      */
     private function upsert(FoodDTO $foodDto, array $toUpdateIdValue): Food
     {

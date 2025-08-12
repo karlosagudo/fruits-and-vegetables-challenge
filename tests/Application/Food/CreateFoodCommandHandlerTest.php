@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Food;
 
+use App\Application\Exceptions\InvalidUnit;
 use App\Application\Food\CreateFoodCommand;
 use App\Application\Food\CreateFoodCommandHandler;
 use App\Domain\Models\Food;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @group Unit
  *
  * @covers \App\Application\Exceptions\EntityNotFound
+ * @covers \App\Application\Exceptions\InvalidUnit
  * @covers \App\Application\Food\CreateFoodCommand
  * @covers \App\Application\Food\CreateFoodCommandHandler
  * @covers \App\Domain\Models\Food
@@ -39,8 +41,8 @@ final class CreateFoodCommandHandlerTest extends TestCase
         $newId = 1;
         $name = $faker->text(255);
         $type = $faker->randomElement(FoodType::cases());
-        $quantity = $faker->numberBetween(1, 1000);
-        $unit = $faker->text(255);
+        $quantity = $faker->numberBetween(1, 5);
+        $unit = 'kg';
 
         $fakeCommand = new CreateFoodCommand(
             new FoodDTO(
@@ -67,6 +69,35 @@ final class CreateFoodCommandHandlerTest extends TestCase
         $sutCommandHandler = new CreateFoodCommandHandler(
             $repository
         );
+        $sutCommandHandler->handle($fakeCommand);
+    }
+
+    public function testFoodWithBadUnit(): void
+    {
+        $faker = Factory::create('fr_FR');
+        $repository = $this->createMock(FoodRepositoryInterface::class);
+
+        $newId = 1;
+        $name = $faker->text(255);
+        $type = $faker->randomElement(FoodType::cases());
+        $quantity = $faker->numberBetween(1, 1000);
+        $unit = $faker->text(255);
+
+        $fakeCommand = new CreateFoodCommand(
+            new FoodDTO(
+                $newId,
+                $name,
+                $type,
+                $quantity,
+                $unit,
+            )
+        );
+
+        $sutCommandHandler = new CreateFoodCommandHandler(
+            $repository
+        );
+        $this->expectException(InvalidUnit::class);
+        $this->expectExceptionMessage('The Unit '.$unit.' does not exists');
         $sutCommandHandler->handle($fakeCommand);
     }
 }

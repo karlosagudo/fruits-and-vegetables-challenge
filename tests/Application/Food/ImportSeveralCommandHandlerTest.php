@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Food;
 
+use App\Application\Exceptions\InvalidUnit;
 use App\Application\Food\ImportSeveralCommand;
 use App\Application\Food\ImportSeveralCommandHandler;
 use App\Domain\Models\Food;
@@ -15,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  *
- * @coversNothing
+ * @covers \App\Application\Food\ImportSeveralCommandHandler
  */
 class ImportSeveralCommandHandlerTest extends TestCase
 {
@@ -38,9 +39,7 @@ class ImportSeveralCommandHandlerTest extends TestCase
                 unit: 'g'
             ),
         ]);
-        //        $carrotExists = Food::create(
-        //            id: 1, name: 'Carrot', type: FoodType::VEGETABLE, quantity: 6, unit: 'g'
-        //        );
+
         $carrotExists = $this->createMock(Food::class);
         $carrotExists->expects(self::once())
             ->method('update')
@@ -76,6 +75,38 @@ class ImportSeveralCommandHandlerTest extends TestCase
         ;
         // then
         $sut = new ImportSeveralCommandHandler($repository);
+        $sut->handle($command);
+    }
+
+    public function testBadUnit(): void
+    {
+        // given
+        $unit = 'testNotFoundUnit';
+        $command = new ImportSeveralCommand([
+            new FoodDTO(
+                id: 1,
+                name: 'Carrot',
+                type: FoodType::VEGETABLE,
+                quantity: 6,
+                unit: $unit
+            ),
+        ]);
+
+        $carrotExists = $this->createMock(Food::class);
+        $carrotExists->id = 7;
+        $carrotExists->unit = $unit;
+
+        $repository = $this->createMock(FoodRepositoryInterface::class);
+        $repository->expects(self::once())
+            ->method('getByIds')
+            ->with([1])
+            ->willReturn([$carrotExists])
+        ;
+
+        // then
+        $sut = new ImportSeveralCommandHandler($repository);
+        $this->expectException(InvalidUnit::class);
+        $this->expectExceptionMessage('The Unit '.$unit.' does not exists');
         $sut->handle($command);
     }
 }
